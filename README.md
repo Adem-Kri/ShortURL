@@ -1,36 +1,63 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# PDS ShortURL
 
-## Getting Started
+Minimal-but-solid URL shortener built with Next.js (App Router) + Prisma + SQLite.
 
-First, run the development server:
+## Features
+
+- Create short links (random code or custom alias)
+- Redirect `/<code>` with click tracking (`clickCount`, `lastClickedAt`)
+- `/links` list with instant search, filters, sort, responsive layout
+- `/links/[code]` detail page with QR code + edit destination + delete
+- Basic rate limiting backed by SQLite (no in-memory state)
+
+## Local setup
+
+1. Install dependencies
+
+```bash
+npm install
+```
+
+1. Configure environment
+
+Create `.env`:
+
+```bash
+DATABASE_URL="file:./dev.db"
+```
+
+1. Run migrations (creates/updates SQLite DB)
+
+```bash
+npx prisma migrate dev
+```
+
+1. Start dev server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open <http://localhost:3000>
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Environment variables
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `DATABASE_URL` (required)
+  - Example: `file:./dev.db`
+- `NEXT_PUBLIC_BASE_URL` (optional)
+  - Used to generate full short URLs + QR codes in SSR.
+  - Example: `https://short.example.com`
+- `TRUST_PROXY` (optional)
+  - Set to `1` when behind a reverse proxy that sets `x-forwarded-for`.
 
-## Learn More
+## Notes (Windows + Prisma)
 
-To learn more about Next.js, take a look at the following resources:
+If you see `EPERM: operation not permitted, rename ... query_engine-windows.dll.node`, a Node process is locking Prisma’s engine.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Stop `npm run dev` (and any other Node processes)
+- Re-run: `npx prisma generate`
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Deploy notes
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- SQLite works well for local/demo use. For real production, consider moving rate limiting to Redis (Upstash) and the DB to Postgres.
+- If you deploy behind a proxy, set `TRUST_PROXY=1` and ensure `x-forwarded-proto`/`x-forwarded-host` are correct.
