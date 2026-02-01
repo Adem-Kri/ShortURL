@@ -2,12 +2,14 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { useT } from "@/app/providers";
 
 export function LinkDetailActions(props: {
   code: string;
   shortUrl: string;
   originalUrl: string;
 }) {
+  const t = useT();
   const router = useRouter();
   const [copied, setCopied] = useState(false);
   const [deleting, setDeleting] = useState(false);
@@ -22,25 +24,36 @@ export function LinkDetailActions(props: {
       setCopied(true);
       window.setTimeout(() => setCopied(false), 1500);
     } catch (e) {
-      setError(e instanceof Error ? e.message : "failed to copy");
+      setError(e instanceof Error ? e.message : t("detail.actions.copyFailed"));
     }
   }
 
   async function onDelete() {
     setError(null);
-    const ok = window.confirm(`Delete /${props.code}? This cannot be undone.`);
+    const ok = window.confirm(
+      t("detail.actions.deleteConfirm", { code: props.code }),
+    );
     if (!ok) return;
 
     setDeleting(true);
     try {
-      const response = await fetch(`/api/links/${encodeURIComponent(props.code)}`, {
-        method: "DELETE",
-      });
+      const response = await fetch(
+        `/api/links/${encodeURIComponent(props.code)}`,
+        {
+          method: "DELETE",
+        },
+      );
 
       if (!response.ok) {
-        const data = (await response.json().catch(() => null)) as { error?: string } | null;
+        const data = (await response.json().catch(() => null)) as {
+          error?: string;
+        } | null;
         const message = data?.error ?? "delete failed";
-        setError(message);
+        setError(
+          message === "delete failed"
+            ? t("detail.actions.deleteFailed")
+            : message,
+        );
         return;
       }
 
@@ -57,22 +70,31 @@ export function LinkDetailActions(props: {
     setError(null);
     const url = destination.trim();
     if (!url) {
-      setError("URL is required");
+      setError(t("detail.actions.urlRequired"));
       return;
     }
 
     setSaving(true);
     try {
-      const response = await fetch(`/api/links/${encodeURIComponent(props.code)}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ url }),
-      });
+      const response = await fetch(
+        `/api/links/${encodeURIComponent(props.code)}`,
+        {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ url }),
+        },
+      );
 
       if (!response.ok) {
-        const data = (await response.json().catch(() => null)) as { error?: string } | null;
+        const data = (await response.json().catch(() => null)) as {
+          error?: string;
+        } | null;
         const message = data?.error ?? "update failed";
-        setError(message);
+        setError(
+          message === "update failed"
+            ? t("detail.actions.updateFailed")
+            : message,
+        );
         return;
       }
 
@@ -87,14 +109,17 @@ export function LinkDetailActions(props: {
   return (
     <div className="flex flex-col gap-3">
       <div className="rounded-lg border border-zinc-200/70 bg-zinc-50 p-3 dark:border-white/10 dark:bg-white/5">
-        <div className="text-xs font-medium text-zinc-700 dark:text-zinc-300">Edit destination</div>
+        <div className="text-xs font-medium text-zinc-700 dark:text-zinc-300">
+          {t("detail.actions.editDestination")}
+        </div>
         <div className="mt-2 flex flex-col gap-2 sm:flex-row sm:items-center">
           <input
             type="url"
             inputMode="url"
+            dir="ltr"
             value={destination}
             onChange={(e) => setDestination(e.target.value)}
-            className="w-full rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-zinc-900/20 dark:border-white/15 dark:bg-black"
+            className="w-full rounded-lg border border-zinc-200 bg-white px-3 py-2 text-left text-sm outline-none focus:ring-2 focus:ring-zinc-900/20 dark:border-white/15 dark:bg-black"
             placeholder="https://example.com"
           />
           <button
@@ -103,7 +128,7 @@ export function LinkDetailActions(props: {
             onClick={onSave}
             className="rounded-lg bg-zinc-900 px-3 py-2 text-sm font-medium text-white disabled:opacity-60 dark:bg-white dark:text-black"
           >
-            {saving ? "Saving…" : "Save"}
+            {saving ? t("detail.actions.saving") : t("detail.actions.save")}
           </button>
         </div>
       </div>
@@ -114,7 +139,9 @@ export function LinkDetailActions(props: {
           onClick={copy}
           className="rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm font-medium text-zinc-900 hover:bg-zinc-50 dark:border-white/15 dark:bg-black dark:text-zinc-50 dark:hover:bg-white/5"
         >
-          {copied ? "Copied" : "Copy short URL"}
+          {copied
+            ? t("detail.actions.copied")
+            : t("detail.actions.copyShortUrl")}
         </button>
         <button
           type="button"
@@ -122,7 +149,7 @@ export function LinkDetailActions(props: {
           onClick={onDelete}
           className="rounded-lg border border-red-500/30 bg-red-500/10 px-3 py-2 text-sm font-medium text-red-700 hover:bg-red-500/15 disabled:opacity-60 dark:text-red-300"
         >
-          {deleting ? "Deleting…" : "Delete"}
+          {deleting ? t("detail.actions.deleting") : t("detail.actions.delete")}
         </button>
       </div>
       {error ? (

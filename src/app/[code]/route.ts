@@ -17,26 +17,21 @@ export async function GET(
   if (!result.ok) {
     const ip = getClientIp(request);
 
+    const statusUrl = new URL("/status", request.url);
+    statusUrl.searchParams.set("code", code);
+
     if (result.reason === "not_found") {
       logEvent("redirect_not_found", { ip, shortCode: code });
-      return new Response("Not found", {
-        status: 404,
-        headers: {
-          "content-type": "text/plain; charset=utf-8",
-        },
-      });
+      statusUrl.searchParams.set("reason", "not_found");
+      return NextResponse.redirect(statusUrl, 302);
     }
 
     logEvent("redirect_gone", { ip, shortCode: code, reason: result.reason });
-    return new Response(
-      result.reason === "expired" ? "Link expired" : "Link already used",
-      {
-        status: 410,
-        headers: {
-          "content-type": "text/plain; charset=utf-8",
-        },
-      },
+    statusUrl.searchParams.set(
+      "reason",
+      result.reason === "expired" ? "expired" : "used",
     );
+    return NextResponse.redirect(statusUrl, 302);
   }
 
   logEvent("redirect_ok", { ip: getClientIp(request), shortCode: code });

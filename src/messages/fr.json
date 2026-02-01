@@ -1,0 +1,148 @@
+{
+  "app": {
+    "name": "PDS ShortURL",
+    "tagline": "Conçu pour apprendre : Next.js + Prisma + SQLite"
+  },
+  "nav": {
+    "shorten": "Raccourcir",
+    "links": "Liens",
+    "language": "Langue"
+  },
+  "home": {
+    "title": "Raccourcisseur d’URL",
+    "subtitle": "Collez une URL longue, obtenez un lien court.",
+    "viewStats": "Voir les statistiques",
+    "form": {
+      "longUrl": "URL longue",
+      "longUrlPlaceholder": "https://exemple.com/un/chemin/tres/long",
+      "customAlias": "Alias personnalisé (optionnel)",
+      "customAliasPlaceholder": "ex. mon-projet",
+      "customAliasHint": "Doit être en base62 (0-9, A-Z, a-z), 4 à 32 caractères.",
+      "expiresIn": "Expire dans (optionnel)",
+      "never": "Jamais",
+      "oneHour": "1 heure",
+      "oneDay": "24 heures",
+      "sevenDays": "7 jours",
+      "thirtyDays": "30 jours",
+      "oneTime": "À usage unique",
+      "shorten": "Raccourcir",
+      "shortening": "Raccourcissement…",
+      "tryAgainIn": "Réessayer dans {seconds}s",
+      "reset": "Réinitialiser"
+    },
+    "result": {
+      "shortLink": "Lien court",
+      "copy": "Copier",
+      "copied": "Copié",
+      "originalUrl": "URL d'origine",
+      "visitingHint": "Aller sur /{code} redirige et incrémente le compteur de clics."
+    },
+    "errors": {
+      "requestFailed": "La requête a échoué",
+      "aliasTaken": "Cet alias est déjà pris. Essayez-en un autre.",
+      "failedToCopy": "Impossible de copier"
+    }
+  },
+  "links": {
+    "title": "Liens",
+    "subtitle": "URLs raccourcies récentes et compteurs de clics.",
+    "back": "Retour",
+    "tip": "Astuce : ouvrez un lien court dans un autre onglet puis actualisez pour voir les clics.",
+    "search": {
+      "placeholder": "Rechercher par code ou URL…",
+      "clear": "Effacer",
+      "clickedOnly": "Cliqués uniquement",
+      "sort": "Tri",
+      "dir": "Sens",
+      "created": "Création",
+      "clicks": "Clics",
+      "lastClick": "Dernier clic",
+      "desc": "Desc",
+      "asc": "Asc"
+    },
+    "list": {
+      "selectAllOnPage": "Tout sélectionner sur la page",
+      "deleteSelected": "Supprimer la sélection ({count})",
+      "deleting": "Suppression…",
+      "noLinks": "Aucun lien pour le moment. Créez-en un sur la page d’accueil.",
+      "open": "ouvrir",
+      "selectOneAria": "Sélectionner {code}",
+      "openRedirectTitle": "Ouvrir la redirection",
+      "copy": "Copier",
+      "details": "Détails",
+      "code": "Code",
+      "originalUrl": "URL d'origine",
+      "actions": "Actions",
+      "select": "Sélection",
+      "confirmDeleteMany": "Supprimer {count} lien(s) ? Cette action est irréversible.",
+      "deleteFailed": "Échec de suppression /{code} : {error}",
+      "copyFailed": "Impossible de copier"
+    }
+  },
+  "detail": {
+    "subtitle": "Détails et actions.",
+    "backToLinks": "Retour aux liens",
+    "shortUrl": "URL courte",
+    "openRedirectTitle": "Ouvrir le lien court (redirection)",
+    "openOriginal": "Ouvrir l'original",
+    "openOriginalTitle": "Ouvrir l'URL d'origine",
+    "originalUrl": "URL d'origine",
+    "created": "Créé",
+    "lastClick": "Dernier clic",
+    "clicks": "Clics",
+    "expires": "Expiration",
+    "never": "Jamais",
+    "expired": "Expiré",
+    "oneTime": "À usage unique",
+    "yes": "Oui",
+    "no": "Non",
+    "usedAt": "Utilisé le {date}",
+    "notUsedYet": "Pas encore utilisé",
+    "qr": {
+      "title": "QR code",
+      "subtitle": "Scannez pour ouvrir l'URL courte.",
+      "ariaLabel": "QR code pour {url}",
+      "downloadPng": "Télécharger PNG",
+      "downloadSvg": "Télécharger SVG"
+    },
+    "actions": {
+      "editDestination": "Modifier la destination",
+      "save": "Enregistrer",
+      "saving": "Enregistrement…",
+      "copyShortUrl": "Copier l'URL courte",
+      "copied": "Copié",
+      "delete": "Supprimer",
+      "deleteConfirm": "Supprimer /{code} ? Cette action est irréversible.",
+      "deleting": "Suppression…",
+      "urlRequired": "L'URL est requise",
+      "updateFailed": "Échec de mise à jour",
+      "deleteFailed": "Échec de suppression",
+      "copyFailed": "Impossible de copier"
+    }
+  },
+  "notFound": {
+    "title": "Page introuvable",
+    "subtitle": "La page demandée n’existe pas ou a été déplacée.",
+    "goShorten": "Aller à Raccourcir",
+    "viewLinks": "Voir les liens",
+    "tip": "Astuce : si vous avez saisi un code manuellement, vérifiez-le."
+  },
+  "status": {
+    "notFound": {
+      "title": "Lien introuvable",
+      "subtitle": "Ce lien court n’existe pas (ou a été supprimé)."
+    },
+    "expired": {
+      "title": "Lien expiré",
+      "subtitle": "Ce lien court a expiré et ne peut plus être utilisé."
+    },
+    "used": {
+      "title": "Lien déjà utilisé",
+      "subtitle": "Ce lien court était à usage unique et a déjà été consommé."
+    },
+    "code": "Code",
+    "goHome": "Retour à l’accueil",
+    "viewLinks": "Voir les liens",
+    "redirectingIn": "Redirection vers l’accueil dans {seconds}s"
+  }
+}

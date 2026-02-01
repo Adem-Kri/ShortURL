@@ -1,0 +1,148 @@
+{
+  "app": {
+    "name": "PDS ShortURL",
+    "tagline": "Built for learning: Next.js + Prisma + SQLite"
+  },
+  "nav": {
+    "shorten": "Shorten",
+    "links": "Links",
+    "language": "Language"
+  },
+  "home": {
+    "title": "URL Shortener",
+    "subtitle": "Paste a long URL, get a short link.",
+    "viewStats": "View link stats",
+    "form": {
+      "longUrl": "Long URL",
+      "longUrlPlaceholder": "https://example.com/some/very/long/path",
+      "customAlias": "Custom alias (optional)",
+      "customAliasPlaceholder": "e.g. my-project",
+      "customAliasHint": "Must be base62 (0-9, A-Z, a-z), 4–32 chars.",
+      "expiresIn": "Expires in (optional)",
+      "never": "Never",
+      "oneHour": "1 hour",
+      "oneDay": "24 hours",
+      "sevenDays": "7 days",
+      "thirtyDays": "30 days",
+      "oneTime": "One-time use",
+      "shorten": "Shorten",
+      "shortening": "Shortening…",
+      "tryAgainIn": "Try again in {seconds}s",
+      "reset": "Reset"
+    },
+    "result": {
+      "shortLink": "Short link",
+      "copy": "Copy",
+      "copied": "Copied",
+      "originalUrl": "Original URL",
+      "visitingHint": "Visiting /{code} redirects and increments the click count."
+    },
+    "errors": {
+      "requestFailed": "Request failed",
+      "aliasTaken": "That alias is already taken. Try another one.",
+      "failedToCopy": "Failed to copy"
+    }
+  },
+  "links": {
+    "title": "Links",
+    "subtitle": "Recent shortened URLs and click counts.",
+    "back": "Back",
+    "tip": "Tip: open a short link in another tab and refresh to see click counts.",
+    "search": {
+      "placeholder": "Search by code or URL…",
+      "clear": "Clear",
+      "clickedOnly": "Clicked only",
+      "sort": "Sort",
+      "dir": "Dir",
+      "created": "Created",
+      "clicks": "Clicks",
+      "lastClick": "Last click",
+      "desc": "Desc",
+      "asc": "Asc"
+    },
+    "list": {
+      "selectAllOnPage": "Select all on page",
+      "selectOneAria": "Select {code}",
+      "deleteSelected": "Delete selected ({count})",
+      "deleting": "Deleting…",
+      "noLinks": "No links yet. Create one on the home page.",
+      "open": "open",
+      "openRedirectTitle": "Open redirect",
+      "copy": "Copy",
+      "details": "Details",
+      "code": "Code",
+      "originalUrl": "Original URL",
+      "actions": "Actions",
+      "select": "Select",
+      "confirmDeleteMany": "Delete {count} link(s)? This cannot be undone.",
+      "deleteFailed": "Failed to delete /{code}: {error}",
+      "copyFailed": "Failed to copy"
+    }
+  },
+  "detail": {
+    "subtitle": "Link details and actions.",
+    "backToLinks": "Back to links",
+    "shortUrl": "Short URL",
+    "openRedirectTitle": "Open the short link (redirect)",
+    "openOriginal": "Open original",
+    "openOriginalTitle": "Open original URL",
+    "originalUrl": "Original URL",
+    "created": "Created",
+    "lastClick": "Last click",
+    "clicks": "Clicks",
+    "expires": "Expires",
+    "never": "Never",
+    "expired": "Expired",
+    "oneTime": "One-time use",
+    "yes": "Yes",
+    "no": "No",
+    "usedAt": "Used at {date}",
+    "notUsedYet": "Not used yet",
+    "qr": {
+      "title": "QR code",
+      "subtitle": "Scan to open the short URL.",
+      "ariaLabel": "QR code for {url}",
+      "downloadPng": "Download PNG",
+      "downloadSvg": "Download SVG"
+    },
+    "actions": {
+      "editDestination": "Edit destination",
+      "save": "Save",
+      "saving": "Saving…",
+      "copyShortUrl": "Copy short URL",
+      "copied": "Copied",
+      "delete": "Delete",
+      "deleteConfirm": "Delete /{code}? This cannot be undone.",
+      "deleting": "Deleting…",
+      "urlRequired": "URL is required",
+      "updateFailed": "Update failed",
+      "deleteFailed": "Delete failed",
+      "copyFailed": "Failed to copy"
+    }
+  },
+  "notFound": {
+    "title": "Page not found",
+    "subtitle": "The page you’re looking for doesn’t exist or was moved.",
+    "goShorten": "Go to Shorten",
+    "viewLinks": "View Links",
+    "tip": "Tip: if you typed a short code manually, double-check it."
+  },
+  "status": {
+    "notFound": {
+      "title": "Link not found",
+      "subtitle": "That short link doesn’t exist (or was removed)."
+    },
+    "expired": {
+      "title": "Link expired",
+      "subtitle": "This short link has expired and can no longer be used."
+    },
+    "used": {
+      "title": "Link already used",
+      "subtitle": "This short link was one-time use and has already been consumed."
+    },
+    "code": "Code",
+    "goHome": "Back to home",
+    "viewLinks": "View links",
+    "redirectingIn": "Redirecting to home in {seconds}s"
+  }
+}

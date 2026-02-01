@@ -34,6 +34,41 @@ body {
     sans-serif;
 }
 
+@keyframes theme-grayscale-wash {
+  0% {
+    filter: grayscale(0);
+  }
+  50% {
+    filter: grayscale(1);
+  }
+  100% {
+    filter: grayscale(0);
+  }
+}
+
+html.theme-transitioning {
+  animation: theme-grayscale-wash 1500ms ease both;
+}
+
+html.theme-transitioning,
+html.theme-transitioning * {
+  transition-property:
+    background-color, color, border-color, fill, stroke, box-shadow;
+  transition-duration: 1500ms;
+  transition-timing-function: ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.theme-transitioning {
+    animation: none;
+  }
+
+  html.theme-transitioning,
+  html.theme-transitioning * {
+    transition-duration: 0ms;
+  }
+}
+
 code,
 pre,
 .font-mono {
