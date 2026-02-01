@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
+import { useFormatDateTime, useT } from "@/app/providers";
 
 type LinkRow = {
   shortCode: string;
@@ -12,22 +13,22 @@ type LinkRow = {
   lastClickedAt: string | null;
 };
 
-function formatDate(iso: string): string {
-  const date = new Date(iso);
-  return new Intl.DateTimeFormat(undefined, {
-    dateStyle: "medium",
-    timeStyle: "short",
-  }).format(date);
-}
-
-async function deleteOne(code: string): Promise<{ ok: true } | { ok: false; error: string }> {
-  const response = await fetch(`/api/links/${encodeURIComponent(code)}`, { method: "DELETE" });
+async function deleteOne(
+  code: string,
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  const response = await fetch(`/api/links/${encodeURIComponent(code)}`, {
+    method: "DELETE",
+  });
   if (response.ok) return { ok: true };
-  const data = (await response.json().catch(() => null)) as { error?: string } | null;
+  const data = (await response.json().catch(() => null)) as {
+    error?: string;
+  } | null;
   return { ok: false, error: data?.error ?? "delete failed" };
 }
 
 export function LinksList(props: { links: LinkRow[] }) {
+  const t = useT();
+  const formatDateTime = useFormatDateTime();
   const router = useRouter();
   const [selected, setSelected] = useState<Record<string, boolean>>({});
   const [busy, setBusy] = useState(false);
@@ -38,7 +39,8 @@ export function LinksList(props: { links: LinkRow[] }) {
     [props.links, selected],
   );
 
-  const allOnPageSelected = selectedCodes.length > 0 && selectedCodes.length === props.links.length;
+  const allOnPageSelected =
+    selectedCodes.length > 0 && selectedCodes.length === props.links.length;
 
   function toggleAllOnPage(next: boolean) {
     const nextSelected: Record<string, boolean> = { ...selected };
@@ -52,7 +54,7 @@ export function LinksList(props: { links: LinkRow[] }) {
       const shortUrl = `${window.location.origin}/${code}`;
       await navigator.clipboard.writeText(shortUrl);
     } catch (e) {
-      setError(e instanceof Error ? e.message : "failed to copy");
+      setError(e instanceof Error ? e.message : t("links.list.copyFailed"));
     }
   }
 
@@ -61,7 +63,9 @@ export function LinksList(props: { links: LinkRow[] }) {
     const codes = selectedCodes;
     if (codes.length === 0) return;
 
-    const ok = window.confirm(`Delete ${codes.length} link(s)? This cannot be undone.`);
+    const ok = window.confirm(
+      t("links.list.confirmDeleteMany", { count: codes.length }),
+    );
     if (!ok) return;
 
     setBusy(true);
@@ -69,7 +73,7 @@ export function LinksList(props: { links: LinkRow[] }) {
       for (const code of codes) {
         const result = await deleteOne(code);
         if (!result.ok) {
-          setError(`Failed to delete /${code}: ${result.error}`);
+          setError(t("links.list.deleteFailed", { code, error: result.error }));
           break;
         }
       }
@@ -93,7 +97,7 @@ export function LinksList(props: { links: LinkRow[] }) {
             onChange={(e) => toggleAllOnPage(e.target.checked)}
             className="h-4 w-4 rounded border-zinc-300 text-zinc-900 dark:border-white/20"
           />
-          Select all on page
+          {t("links.list.selectAllOnPage")}
         </label>
 
         <div className="flex items-center gap-2">
@@ -103,7 +107,9 @@ export function LinksList(props: { links: LinkRow[] }) {
             onClick={deleteSelected}
             className="rounded-lg border border-red-500/30 bg-red-500/10 px-3 py-2 text-xs font-medium text-red-700 hover:bg-red-500/15 disabled:opacity-60 dark:text-red-300"
           >
-            {busy ? "Deleting…" : `Delete selected (${selectedCodes.length})`}
+            {busy
+              ? t("links.list.deleting")
+              : t("links.list.deleteSelected", { count: selectedCodes.length })}
           </button>
         </div>
       </div>
@@ -118,7 +124,7 @@ export function LinksList(props: { links: LinkRow[] }) {
       <div className="md:hidden">
         {props.links.length === 0 ? (
           <div className="px-4 py-6 text-sm text-zinc-600 dark:text-zinc-400">
-            No links yet. Create one on the home page.
+            {t("links.list.noLinks")}
           </div>
         ) : (
           <div className="divide-y divide-zinc-200 dark:divide-white/10">
@@ -129,24 +135,27 @@ export function LinksList(props: { links: LinkRow[] }) {
                     <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
                       <Link
                         href={`/links/${row.shortCode}`}
+                        dir="ltr"
                         className="font-mono font-medium underline underline-offset-4"
                       >
                         {row.shortCode}
                       </Link>
                       <a
                         href={`/${row.shortCode}`}
+                        dir="ltr"
                         className="text-xs text-zinc-600 underline underline-offset-4 dark:text-zinc-400"
-                        title="Open redirect"
+                        title={t("links.list.openRedirectTitle")}
                       >
-                        open
+                        {t("links.list.open")}
                       </a>
                     </div>
                     <a
                       href={row.originalUrl}
+                      dir="ltr"
                       target="_blank"
                       rel="noreferrer"
                       title={row.originalUrl}
-                      className="mt-2 block truncate text-sm underline underline-offset-4"
+                      className="mt-2 block truncate text-left text-sm underline underline-offset-4"
                     >
                       {row.originalUrl}
                     </a>
@@ -157,13 +166,13 @@ export function LinksList(props: { links: LinkRow[] }) {
                         onClick={() => copyShortUrl(row.shortCode)}
                         className="rounded-lg border border-zinc-200 bg-white px-3 py-2 text-xs font-medium text-zinc-900 hover:bg-zinc-50 dark:border-white/15 dark:bg-black dark:text-zinc-50 dark:hover:bg-white/5"
                       >
-                        Copy
+                        {t("links.list.copy")}
                       </button>
                       <Link
                         href={`/links/${row.shortCode}`}
                         className="rounded-lg border border-zinc-200 bg-white px-3 py-2 text-xs font-medium text-zinc-900 hover:bg-zinc-50 dark:border-white/15 dark:bg-black dark:text-zinc-50 dark:hover:bg-white/5"
                       >
-                        Details
+                        {t("links.list.details")}
                       </Link>
                     </div>
                   </div>
@@ -172,24 +181,43 @@ export function LinksList(props: { links: LinkRow[] }) {
                     <input
                       type="checkbox"
                       checked={!!selected[row.shortCode]}
-                      onChange={(e) => setSelected({ ...selected, [row.shortCode]: e.target.checked })}
+                      onChange={(e) =>
+                        setSelected({
+                          ...selected,
+                          [row.shortCode]: e.target.checked,
+                        })
+                      }
                       className="h-4 w-4 rounded border-zinc-300 text-zinc-900 dark:border-white/20"
-                      aria-label={`Select ${row.shortCode}`}
+                      aria-label={t("links.list.selectOneAria", {
+                        code: row.shortCode,
+                      })}
                     />
-                    <div className="mt-2 text-xs text-zinc-500 dark:text-zinc-500">Clicks</div>
-                    <div className="text-sm font-medium tabular-nums">{row.clickCount}</div>
+                    <div className="mt-2 text-xs text-zinc-500 dark:text-zinc-500">
+                      {t("links.search.clicks")}
+                    </div>
+                    <div className="text-sm font-medium tabular-nums">
+                      {row.clickCount}
+                    </div>
                   </div>
                 </div>
 
                 <div className="mt-3 grid grid-cols-2 gap-3 text-xs text-zinc-600 dark:text-zinc-400">
                   <div>
-                    <div className="text-zinc-500 dark:text-zinc-500">Created</div>
-                    <div className="mt-0.5 whitespace-nowrap">{formatDate(row.createdAt)}</div>
+                    <div className="text-zinc-500 dark:text-zinc-500">
+                      {t("links.search.created")}
+                    </div>
+                    <div className="mt-0.5 whitespace-nowrap">
+                      {formatDateTime(row.createdAt)}
+                    </div>
                   </div>
                   <div>
-                    <div className="text-zinc-500 dark:text-zinc-500">Last click</div>
+                    <div className="text-zinc-500 dark:text-zinc-500">
+                      {t("links.search.lastClick")}
+                    </div>
                     <div className="mt-0.5 whitespace-nowrap">
-                      {row.lastClickedAt ? formatDate(row.lastClickedAt) : "—"}
+                      {row.lastClickedAt
+                        ? formatDateTime(row.lastClickedAt)
+                        : "—"}
                     </div>
                   </div>
                 </div>
@@ -206,21 +234,36 @@ export function LinksList(props: { links: LinkRow[] }) {
             <thead className="border-b border-zinc-200 bg-zinc-50 dark:border-white/15 dark:bg-white/5">
               <tr>
                 <th className="w-[44px] px-4 py-3">
-                  <span className="sr-only">Select</span>
+                  <span className="sr-only">{t("links.list.select")}</span>
                 </th>
-                <th className="px-4 py-3 font-medium">Code</th>
-                <th className="px-4 py-3 font-medium">Original URL</th>
-                <th className="px-4 py-3 font-medium">Created</th>
-                <th className="px-4 py-3 font-medium">Last click</th>
-                <th className="px-4 py-3 text-right font-medium">Clicks</th>
-                <th className="px-4 py-3 text-right font-medium">Actions</th>
+                <th className="px-4 py-3 font-medium">
+                  {t("links.list.code")}
+                </th>
+                <th className="px-4 py-3 font-medium">
+                  {t("links.list.originalUrl")}
+                </th>
+                <th className="px-4 py-3 font-medium">
+                  {t("links.search.created")}
+                </th>
+                <th className="px-4 py-3 font-medium">
+                  {t("links.search.lastClick")}
+                </th>
+                <th className="px-4 py-3 text-right font-medium">
+                  {t("links.search.clicks")}
+                </th>
+                <th className="px-4 py-3 text-right font-medium">
+                  {t("links.list.actions")}
+                </th>
               </tr>
             </thead>
             <tbody>
               {props.links.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="px-4 py-6 text-zinc-600 dark:text-zinc-400">
-                    No links yet. Create one on the home page.
+                  <td
+                    colSpan={7}
+                    className="px-4 py-6 text-zinc-600 dark:text-zinc-400"
+                  >
+                    {t("links.list.noLinks")}
                   </td>
                 </tr>
               ) : (
@@ -233,43 +276,60 @@ export function LinksList(props: { links: LinkRow[] }) {
                       <input
                         type="checkbox"
                         checked={!!selected[row.shortCode]}
-                        onChange={(e) => setSelected({ ...selected, [row.shortCode]: e.target.checked })}
+                        onChange={(e) =>
+                          setSelected({
+                            ...selected,
+                            [row.shortCode]: e.target.checked,
+                          })
+                        }
                         className="h-4 w-4 rounded border-zinc-300 text-zinc-900 dark:border-white/20"
-                        aria-label={`Select ${row.shortCode}`}
+                        aria-label={t("links.list.selectOneAria", {
+                          code: row.shortCode,
+                        })}
                       />
                     </td>
                     <td className="px-4 py-3 font-mono">
                       <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
-                        <Link href={`/links/${row.shortCode}`} className="underline underline-offset-4">
+                        <Link
+                          href={`/links/${row.shortCode}`}
+                          dir="ltr"
+                          className="underline underline-offset-4"
+                        >
                           {row.shortCode}
                         </Link>
                         <a
                           href={`/${row.shortCode}`}
+                          dir="ltr"
                           className="text-xs text-zinc-600 underline underline-offset-4 dark:text-zinc-400"
-                          title="Open redirect"
+                          title={t("links.list.openRedirectTitle")}
                         >
-                          open
+                          {t("links.list.open")}
                         </a>
                       </div>
                     </td>
                     <td className="px-4 py-3">
                       <a
                         href={row.originalUrl}
+                        dir="ltr"
                         target="_blank"
                         rel="noreferrer"
                         title={row.originalUrl}
-                        className="block max-w-[52ch] truncate underline underline-offset-4"
+                        className="block max-w-[52ch] truncate text-left underline underline-offset-4"
                       >
                         {row.originalUrl}
                       </a>
                     </td>
                     <td className="px-4 py-3 whitespace-nowrap text-zinc-600 dark:text-zinc-400">
-                      {formatDate(row.createdAt)}
+                      {formatDateTime(row.createdAt)}
                     </td>
                     <td className="px-4 py-3 whitespace-nowrap text-zinc-600 dark:text-zinc-400">
-                      {row.lastClickedAt ? formatDate(row.lastClickedAt) : "—"}
+                      {row.lastClickedAt
+                        ? formatDateTime(row.lastClickedAt)
+                        : "—"}
                     </td>
-                    <td className="px-4 py-3 text-right tabular-nums">{row.clickCount}</td>
+                    <td className="px-4 py-3 text-right tabular-nums">
+                      {row.clickCount}
+                    </td>
                     <td className="px-4 py-3">
                       <div className="flex justify-end gap-2">
                         <button
@@ -277,13 +337,13 @@ export function LinksList(props: { links: LinkRow[] }) {
                           onClick={() => copyShortUrl(row.shortCode)}
                           className="rounded-lg border border-zinc-200 bg-white px-3 py-2 text-xs font-medium text-zinc-900 hover:bg-zinc-50 dark:border-white/15 dark:bg-black dark:text-zinc-50 dark:hover:bg-white/5"
                         >
-                          Copy
+                          {t("links.list.copy")}
                         </button>
                         <Link
                           href={`/links/${row.shortCode}`}
                           className="rounded-lg border border-zinc-200 bg-white px-3 py-2 text-xs font-medium text-zinc-900 hover:bg-zinc-50 dark:border-white/15 dark:bg-black dark:text-zinc-50 dark:hover:bg-white/5"
                         >
-                          Details
+                          {t("links.list.details")}
                         </Link>
                       </div>
                     </td>

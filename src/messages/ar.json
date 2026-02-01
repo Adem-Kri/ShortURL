@@ -1,0 +1,148 @@
+{
+  "app": {
+    "name": "PDS ShortURL",
+    "tagline": "مبني للتعلّم: Next.js + Prisma + SQLite"
+  },
+  "nav": {
+    "shorten": "اختصار",
+    "links": "الروابط",
+    "language": "اللغة"
+  },
+  "home": {
+    "title": "اختصار الروابط",
+    "subtitle": "ألصق رابطًا طويلًا لتحصل على رابط قصير.",
+    "viewStats": "عرض الإحصائيات",
+    "form": {
+      "longUrl": "الرابط الطويل",
+      "longUrlPlaceholder": "https://example.com/some/very/long/path",
+      "customAlias": "اسم مستعار (اختياري)",
+      "customAliasPlaceholder": "مثال: my-project",
+      "customAliasHint": "يجب أن يكون Base62 (0-9, A-Z, a-z) من 4 إلى 32 حرفًا.",
+      "expiresIn": "ينتهي خلال (اختياري)",
+      "never": "أبدًا",
+      "oneHour": "ساعة واحدة",
+      "oneDay": "24 ساعة",
+      "sevenDays": "7 أيام",
+      "thirtyDays": "30 يومًا",
+      "oneTime": "استخدام لمرة واحدة",
+      "shorten": "اختصار",
+      "shortening": "جارٍ الاختصار…",
+      "tryAgainIn": "أعد المحاولة خلال {seconds}ث",
+      "reset": "إعادة ضبط"
+    },
+    "result": {
+      "shortLink": "الرابط القصير",
+      "copy": "نسخ",
+      "copied": "تم النسخ",
+      "originalUrl": "الرابط الأصلي",
+      "visitingHint": "زيارة /{code} تقوم بإعادة التوجيه وزيادة عدد النقرات."
+    },
+    "errors": {
+      "requestFailed": "فشل الطلب",
+      "aliasTaken": "هذا الاسم المستعار مستخدم بالفعل. جرّب اسمًا آخر.",
+      "failedToCopy": "تعذّر النسخ"
+    }
+  },
+  "links": {
+    "title": "الروابط",
+    "subtitle": "أحدث الروابط المختصرة وعدّادات النقر.",
+    "back": "رجوع",
+    "tip": "نصيحة: افتح رابطًا قصيرًا في تبويب آخر ثم حدّث الصفحة لرؤية عدد النقرات.",
+    "search": {
+      "placeholder": "ابحث بالكود أو الرابط…",
+      "clear": "مسح",
+      "clickedOnly": "المُنقَر عليها فقط",
+      "sort": "الترتيب",
+      "dir": "الاتجاه",
+      "created": "تاريخ الإنشاء",
+      "clicks": "النقرات",
+      "lastClick": "آخر نقرة",
+      "desc": "تنازلي",
+      "asc": "تصاعدي"
+    },
+    "list": {
+      "selectAllOnPage": "تحديد الكل في الصفحة",
+      "deleteSelected": "حذف المحدد ({count})",
+      "deleting": "جارٍ الحذف…",
+      "noLinks": "لا توجد روابط بعد. أنشئ واحدًا من الصفحة الرئيسية.",
+      "open": "فتح",
+      "selectOneAria": "حدد {code}",
+      "openRedirectTitle": "فتح إعادة التوجيه",
+      "copy": "نسخ",
+      "details": "تفاصيل",
+      "code": "الكود",
+      "originalUrl": "الرابط الأصلي",
+      "actions": "إجراءات",
+      "select": "تحديد",
+      "confirmDeleteMany": "حذف {count} رابط/روابط؟ لا يمكن التراجع عن ذلك.",
+      "deleteFailed": "فشل حذف /{code}: {error}",
+      "copyFailed": "تعذّر النسخ"
+    }
+  },
+  "detail": {
+    "subtitle": "تفاصيل الرابط وإجراءاته.",
+    "backToLinks": "العودة إلى الروابط",
+    "shortUrl": "الرابط القصير",
+    "openRedirectTitle": "فتح الرابط المختصر (إعادة توجيه)",
+    "openOriginal": "فتح الأصلي",
+    "openOriginalTitle": "فتح الرابط الأصلي",
+    "originalUrl": "الرابط الأصلي",
+    "created": "تاريخ الإنشاء",
+    "lastClick": "آخر نقرة",
+    "clicks": "النقرات",
+    "expires": "الانتهاء",
+    "never": "أبدًا",
+    "expired": "منتهي الصلاحية",
+    "oneTime": "استخدام لمرة واحدة",
+    "yes": "نعم",
+    "no": "لا",
+    "usedAt": "تم الاستخدام في {date}",
+    "notUsedYet": "لم يُستخدم بعد",
+    "qr": {
+      "title": "رمز QR",
+      "subtitle": "امسح لفتح الرابط القصير.",
+      "ariaLabel": "رمز QR للرابط {url}",
+      "downloadPng": "تنزيل PNG",
+      "downloadSvg": "تنزيل SVG"
+    },
+    "actions": {
+      "editDestination": "تعديل الوجهة",
+      "save": "حفظ",
+      "saving": "جارٍ الحفظ…",
+      "copyShortUrl": "نسخ الرابط القصير",
+      "copied": "تم النسخ",
+      "delete": "حذف",
+      "deleteConfirm": "حذف /{code}? لا يمكن التراجع عن ذلك.",
+      "deleting": "جارٍ الحذف…",
+      "urlRequired": "الرابط مطلوب",
+      "updateFailed": "فشل التحديث",
+      "deleteFailed": "فشل الحذف",
+      "copyFailed": "تعذّر النسخ"
+    }
+  },
+  "notFound": {
+    "title": "الصفحة غير موجودة",
+    "subtitle": "الصفحة التي تبحث عنها غير موجودة أو تم نقلها.",
+    "goShorten": "اذهب للاختصار",
+    "viewLinks": "عرض الروابط",
+    "tip": "نصيحة: إذا أدخلت كودًا يدويًا، تحقّق منه مرة أخرى."
+  },
+  "status": {
+    "notFound": {
+      "title": "الرابط غير موجود",
+      "subtitle": "هذا الرابط المختصر غير موجود (أو تم حذفه)."
+    },
+    "expired": {
+      "title": "انتهت صلاحية الرابط",
+      "subtitle": "انتهت صلاحية هذا الرابط المختصر ولم يعد صالحًا للاستخدام."
+    },
+    "used": {
+      "title": "تم استخدام الرابط مسبقًا",
+      "subtitle": "هذا الرابط كان للاستخدام مرة واحدة وتم استهلاكه بالفعل."
+    },
+    "code": "الرمز",
+    "goHome": "العودة إلى الرئيسية",
+    "viewLinks": "عرض الروابط",
+    "redirectingIn": "سيتم نقلك إلى الرئيسية خلال {seconds}ث"
+  }
+}

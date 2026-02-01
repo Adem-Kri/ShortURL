@@ -3,6 +3,11 @@ import Link from "next/link";
 import { NavLink } from "@/components/NavLink";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { Providers } from "@/app/providers";
+import { getDirection } from "@/i18n/locales";
+import { getFallbackMessages, getMessages } from "@/i18n/messages";
+import { getRequestLocale } from "@/i18n/server";
+import { createTranslator } from "@/i18n/translate";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -13,27 +18,35 @@ export const metadata: Metadata = {
   description: "Minimal URL shortener (Next.js + Prisma + SQLite)",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const locale = await getRequestLocale();
+  const messages = getMessages(locale);
+  const t = createTranslator(messages, getFallbackMessages());
+  const dir = getDirection(locale);
+
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang={locale} dir={dir} suppressHydrationWarning>
       <body className="antialiased">
-        <Providers>
+        <Providers locale={locale} messages={messages}>
           <div className="min-h-screen bg-zinc-50 text-zinc-900 dark:bg-black dark:text-zinc-50">
           <header className="border-b border-zinc-200/70 bg-white/70 backdrop-blur dark:border-white/10 dark:bg-black/40">
             <div className="mx-auto flex w-full max-w-4xl flex-wrap items-center justify-between gap-3 px-4 py-4 sm:px-6">
               <div className="flex items-center gap-3">
                 <ThemeToggle />
                 <Link href="/" className="font-semibold tracking-tight">
-                  PDS ShortURL
+                  {t("app.name")}
                 </Link>
               </div>
               <nav className="flex items-center gap-1">
-                <NavLink href="/">Shorten</NavLink>
-                <NavLink href="/links">Links</NavLink>
+                <NavLink href="/">{t("nav.shorten")}</NavLink>
+                <NavLink href="/links">{t("nav.links")}</NavLink>
+                <div className="ml-1">
+                  <LanguageSwitcher currentLocale={locale} label={t("nav.language")} />
+                </div>
               </nav>
             </div>
           </header>
@@ -43,7 +56,7 @@ export default function RootLayout({
           </main>
 
           <footer className="border-t border-zinc-200/70 px-4 py-8 text-center text-xs text-zinc-500 dark:border-white/10 dark:text-zinc-500 sm:px-6">
-            Built for learning: Next.js + Prisma + SQLite
+            {t("app.tagline")}
           </footer>
           </div>
         </Providers>

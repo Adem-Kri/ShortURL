@@ -1,5 +1,6 @@
 "use client";
 
+import { useRef } from "react";
 import { useTheme } from "next-themes";
 
 function SunIcon(props: { className?: string }) {
@@ -45,10 +46,21 @@ function MoonIcon(props: { className?: string }) {
 
 export function ThemeToggle() {
   const { setTheme } = useTheme();
+  const transitionTimeoutRef = useRef<number | null>(null);
 
   function toggleTheme() {
-    // No state/effects needed: the current applied theme is reflected by the
-    // `dark` class on <html> (managed by next-themes).
+    const root = document.documentElement;
+    root.classList.add("theme-transitioning");
+    if (transitionTimeoutRef.current !== null) {
+      window.clearTimeout(transitionTimeoutRef.current);
+    }
+    transitionTimeoutRef.current = window.setTimeout(() => {
+      root.classList.remove("theme-transitioning");
+      transitionTimeoutRef.current = null;
+    }, 1500);
+
+    // The current applied theme is reflected by the `dark` class on <html>
+    // (managed by next-themes).
     const isDarkNow = document.documentElement.classList.contains("dark");
     setTheme(isDarkNow ? "light" : "dark");
   }

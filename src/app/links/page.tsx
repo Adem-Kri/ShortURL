@@ -3,6 +3,9 @@ import Link from "next/link";
 import { listRecentLinks } from "@/server/linkService";
 import { LinksSearchBar } from "@/components/LinksSearchBar";
 import { LinksList } from "@/components/LinksList";
+import { getFallbackMessages, getMessages } from "@/i18n/messages";
+import { getRequestLocale } from "@/i18n/server";
+import { createTranslator } from "@/i18n/translate";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -19,6 +22,10 @@ function asString(value: string | string[] | undefined): string | undefined {
 }
 
 export default async function LinksPage({ searchParams }: LinksPageProps) {
+  const locale = await getRequestLocale();
+  const messages = getMessages(locale);
+  const t = createTranslator(messages, getFallbackMessages());
+
   // Keep this as a server-rendered page; filtering happens via querystring.
   const resolved = searchParams ? await searchParams : {};
   const q = asString(resolved?.q);
@@ -46,16 +53,18 @@ export default async function LinksPage({ searchParams }: LinksPageProps) {
     <section>
       <div className="flex items-baseline justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-semibold tracking-tight">Links</h1>
+          <h1 className="text-3xl font-semibold tracking-tight">
+            {t("links.title")}
+          </h1>
           <p className="mt-2 text-zinc-600 dark:text-zinc-400">
-            Recent shortened URLs and click counts.
+            {t("links.subtitle")}
           </p>
         </div>
         <Link
           href="/"
           className="text-sm font-medium underline underline-offset-4"
         >
-          Back
+          {t("links.back")}
         </Link>
       </div>
 
@@ -68,7 +77,7 @@ export default async function LinksPage({ searchParams }: LinksPageProps) {
       </div>
 
       <p className="mt-4 text-xs text-zinc-500 dark:text-zinc-500">
-        Tip: open a short link in another tab and refresh to see click counts.
+        {t("links.tip")}
       </p>
     </section>
   );
