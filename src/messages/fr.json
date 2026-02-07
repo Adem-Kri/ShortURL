@@ -1,15 +1,17 @@
 {
   "app": {
     "name": "PDS ShortURL",
-    "tagline": "Conçu pour apprendre : Next.js + Prisma + SQLite"
+    "tagline": " "
   },
   "nav": {
     "shorten": "Raccourcir",
     "links": "Liens",
+    "admin": "Admin",
+    "logout": "Déconnexion",
     "language": "Langue"
   },
   "home": {
-    "title": "Raccourcisseur d’URL",
+    "title": "Raccourcisseur d'URL",
     "subtitle": "Collez une URL longue, obtenez un lien court.",
     "viewStats": "Voir les statistiques",
     "form": {
@@ -64,7 +66,7 @@
       "selectAllOnPage": "Tout sélectionner sur la page",
       "deleteSelected": "Supprimer la sélection ({count})",
       "deleting": "Suppression…",
-      "noLinks": "Aucun lien pour le moment. Créez-en un sur la page d’accueil.",
+      "noLinks": "Aucun lien pour le moment. Créez-en un sur la page d'accueil.",
       "open": "ouvrir",
       "selectOneAria": "Sélectionner {code}",
       "openRedirectTitle": "Ouvrir la redirection",
@@ -122,7 +124,7 @@
   },
   "notFound": {
     "title": "Page introuvable",
-    "subtitle": "La page demandée n’existe pas ou a été déplacée.",
+    "subtitle": "La page demandée n'existe pas ou a été déplacée.",
     "goShorten": "Aller à Raccourcir",
     "viewLinks": "Voir les liens",
     "tip": "Astuce : si vous avez saisi un code manuellement, vérifiez-le."
@@ -130,7 +132,7 @@
   "status": {
     "notFound": {
       "title": "Lien introuvable",
-      "subtitle": "Ce lien court n’existe pas (ou a été supprimé)."
+      "subtitle": "Ce lien court n'existe pas (ou a été supprimé)."
     },
     "expired": {
       "title": "Lien expiré",
@@ -141,8 +143,8 @@
       "subtitle": "Ce lien court était à usage unique et a déjà été consommé."
     },
     "code": "Code",
-    "goHome": "Retour à l’accueil",
+    "goHome": "Retour à l'accueil",
     "viewLinks": "Voir les liens",
-    "redirectingIn": "Redirection vers l’accueil dans {seconds}s"
+    "redirectingIn": "Redirection vers l'accueil dans {seconds}s"
   }
 }

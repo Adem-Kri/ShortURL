@@ -4,6 +4,7 @@ import { headers } from "next/headers";
 import QRCode from "qrcode";
 
 import { getLinkByCode } from "@/server/linkService";
+import { requireAdminPage } from "@/server/adminGuard";
 import { LinkDetailActions } from "@/components/LinkDetailActions";
 import { getFallbackMessages, getMessages } from "@/i18n/messages";
 import { getRequestLocale } from "@/i18n/server";
@@ -37,6 +38,8 @@ async function getBaseUrl(): Promise<string> {
 }
 
 export default async function LinkDetailPage({ params }: LinkDetailPageProps) {
+  await requireAdminPage();
+
   const locale = await getRequestLocale();
   const messages = getMessages(locale);
   const t = createTranslator(messages, getFallbackMessages());
