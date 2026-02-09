@@ -1,11 +1,13 @@
 {
   "app": {
     "name": "PDS ShortURL",
-    "tagline": "Built for learning: Next.js + Prisma + SQLite"
+    "tagline": " "
   },
   "nav": {
     "shorten": "Shorten",
     "links": "Links",
+    "admin": "Admin",
+    "logout": "Logout",
     "language": "Language"
   },
   "home": {

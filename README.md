@@ -50,6 +50,28 @@ Open <http://localhost:3000>
 - `TRUST_PROXY` (optional)
   - Set to `1` when behind a reverse proxy that sets `x-forwarded-for`.
 
+### Admin login (optional, recommended)
+
+`/links` and link management APIs can be protected behind an admin login.
+
+Set these in `.env`:
+
+- `AUTH_SECRET` (required for admin auth)
+  - A long random string used to sign the admin session cookie.
+  - Example (PowerShell):
+    - `openssl rand -base64 48`
+- `ADMIN_EMAIL` (required)
+  - Example: `admin@example.com`
+- `ADMIN_PASSWORD` (required)
+  - Plaintext password (intended for local/dev only).
+  - Example: `00000000`
+
+Notes:
+
+- Link creation (`POST /api/links`) stays public.
+- Management pages (`/links`, `/links/[code]`) redirect to `/admin/login` when not authenticated.
+- The debug DB endpoint (`/api/_debug/db`) is disabled in production and requires admin auth in dev.
+
 ## Notes (Windows + Prisma)
 
 If you see `EPERM: operation not permitted, rename ... query_engine-windows.dll.node`, a Node process is locking Prisma’s engine.

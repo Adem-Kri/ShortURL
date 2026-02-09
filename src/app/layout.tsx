@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { cookies } from "next/headers";
 import { NavLink } from "@/components/NavLink";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { Providers } from "@/app/providers";
@@ -8,6 +9,10 @@ import { getFallbackMessages, getMessages } from "@/i18n/messages";
 import { getRequestLocale } from "@/i18n/server";
 import { createTranslator } from "@/i18n/translate";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import {
+  adminSessionCookieName,
+  verifyAdminSessionToken,
+} from "@/server/adminSession";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -28,36 +33,53 @@ export default async function RootLayout({
   const t = createTranslator(messages, getFallbackMessages());
   const dir = getDirection(locale);
 
+  const cookieStore = await cookies();
+  const token = cookieStore.get(adminSessionCookieName)?.value;
+  const adminSession = token ? await verifyAdminSessionToken(token) : null;
+
   return (
     <html lang={locale} dir={dir} suppressHydrationWarning>
       <body className="antialiased">
         <Providers locale={locale} messages={messages}>
           <div className="min-h-screen bg-zinc-50 text-zinc-900 dark:bg-black dark:text-zinc-50">
-          <header className="border-b border-zinc-200/70 bg-white/70 backdrop-blur dark:border-white/10 dark:bg-black/40">
-            <div className="mx-auto flex w-full max-w-4xl flex-wrap items-center justify-between gap-3 px-4 py-4 sm:px-6">
-              <div className="flex items-center gap-3">
-                <ThemeToggle />
-                <Link href="/" className="font-semibold tracking-tight">
-                  {t("app.name")}
-                </Link>
-              </div>
-              <nav className="flex items-center gap-1">
-                <NavLink href="/">{t("nav.shorten")}</NavLink>
-                <NavLink href="/links">{t("nav.links")}</NavLink>
-                <div className="ml-1">
-                  <LanguageSwitcher currentLocale={locale} label={t("nav.language")} />
+            <header className="border-b border-zinc-200/70 bg-white/70 backdrop-blur dark:border-white/10 dark:bg-black/40">
+              <div className="mx-auto flex w-full max-w-4xl flex-wrap items-center justify-between gap-3 px-4 py-4 sm:px-6">
+                <div className="flex items-center gap-3">
+                  <ThemeToggle />
+                  <Link href="/" className="font-semibold tracking-tight">
+                    {t("app.name")}
+                  </Link>
                 </div>
-              </nav>
-            </div>
-          </header>
+                <nav className="flex items-center gap-1">
+                  <NavLink href="/">{t("nav.shorten")}</NavLink>
+                  <NavLink href="/links">{t("nav.links")}</NavLink>
+                  {adminSession ? (
+                    <a
+                      href="/api/admin/logout"
+                      className="rounded-md px-3 py-2 text-sm font-medium text-zinc-700 hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-white/10"
+                    >
+                      {t("nav.logout")}
+                    </a>
+                  ) : (
+                    <NavLink href="/admin/login">{t("nav.admin")}</NavLink>
+                  )}
+                  <div className="ml-1">
+                    <LanguageSwitcher
+                      currentLocale={locale}
+                      label={t("nav.language")}
+                    />
+                  </div>
+                </nav>
+              </div>
+            </header>
 
-          <main className="mx-auto w-full max-w-4xl px-4 py-8 sm:px-6 sm:py-12">
-            {children}
-          </main>
+            <main className="mx-auto w-full max-w-4xl px-4 py-8 sm:px-6 sm:py-12">
+              {children}
+            </main>
 
-          <footer className="border-t border-zinc-200/70 px-4 py-8 text-center text-xs text-zinc-500 dark:border-white/10 dark:text-zinc-500 sm:px-6">
-            {t("app.tagline")}
-          </footer>
+            <footer className="border-t border-zinc-200/70 px-4 py-8 text-center text-xs text-zinc-500 dark:border-white/10 dark:text-zinc-500 sm:px-6">
+              {t("app.tagline")}
+            </footer>
           </div>
         </Providers>
       </body>

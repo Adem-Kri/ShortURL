@@ -7,13 +7,17 @@ import { normalizeAndValidateUrl } from "@/lib/url";
 import { checkRateLimit, getClientIp } from "@/server/rateLimit";
 import { logEvent } from "@/server/logging";
 import { prisma } from "@/server/db";
+import { requireAdminApi } from "@/server/adminGuard";
 
 export const runtime = "nodejs";
 
 export async function GET(
-  _request: Request,
+  request: Request,
   context: { params: Promise<{ code: string }> },
 ) {
+  const auth = await requireAdminApi(request);
+  if (auth) return auth;
+
   const { code } = await context.params;
 
   const originalUrl = await resolveOriginalUrl(code);
@@ -25,12 +29,15 @@ export async function GET(
 }
 
 export async function DELETE(
-  _request: Request,
+  request: Request,
   context: { params: Promise<{ code: string }> },
 ) {
+  const auth = await requireAdminApi(request);
+  if (auth) return auth;
+
   const { code } = await context.params;
 
-  const ip = getClientIp(_request);
+  const ip = getClientIp(request);
   const rl = await checkRateLimit({
     key: `delete:${ip}`,
     limit: 20,
@@ -56,7 +63,10 @@ export async function DELETE(
     return NextResponse.json({ ok: true }, { status: 200 });
   } catch (error) {
     // P2025 = record not found
-    if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2025") {
+    if (
+      error instanceof Prisma.PrismaClientKnownRequestError &&
+      error.code === "P2025"
+    ) {
       logEvent("delete_not_found", { ip, shortCode: code });
       return NextResponse.json({ error: "not found" }, { status: 404 });
     }
@@ -69,6 +79,9 @@ export async function PATCH(
   request: Request,
   context: { params: Promise<{ code: string }> },
 ) {
+  const auth = await requireAdminApi(request);
+  if (auth) return auth;
+
   const { code } = await context.params;
 
   const ip = getClientIp(request);
@@ -120,7 +133,10 @@ export async function PATCH(
     logEvent("update_ok", { ip, shortCode: code });
     return NextResponse.json(row, { status: 200 });
   } catch (error) {
-    if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2025") {
+    if (
+      error instanceof Prisma.PrismaClientKnownRequestError &&
+      error.code === "P2025"
+    ) {
       logEvent("update_not_found", { ip, shortCode: code });
       return NextResponse.json({ error: "not found" }, { status: 404 });
     }

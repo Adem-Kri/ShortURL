@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { listRecentLinks } from "@/server/linkService";
+import { requireAdminPage } from "@/server/adminGuard";
 import { LinksSearchBar } from "@/components/LinksSearchBar";
 import { LinksList } from "@/components/LinksList";
 import { getFallbackMessages, getMessages } from "@/i18n/messages";
@@ -22,6 +23,8 @@ function asString(value: string | string[] | undefined): string | undefined {
 }
 
 export default async function LinksPage({ searchParams }: LinksPageProps) {
+  await requireAdminPage();
+
   const locale = await getRequestLocale();
   const messages = getMessages(locale);
   const t = createTranslator(messages, getFallbackMessages());
